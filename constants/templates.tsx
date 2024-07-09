@@ -74,13 +74,13 @@ export const TRACKING_INPUT: TemplateInput[] = [
     },
     {
         id: "type",
-        label: "Type",
+        label: "Type de transport",
         placeholder: "Truck,Ship.....",
         type: "text",
     },
     {
         id: "orderId",
-        label: "Commande Id",
+        label: "Tracking Id",
         placeholder: "",
         type: "text",
     },
