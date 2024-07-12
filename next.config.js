@@ -1,12 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        pathname: "**",
+      },
+    ],
+  },
   experimental: {
     serverActions: {
-      // allowedOrigins: ["13.41.57.233:3001", "localhost:3001", "13.41.57.233:3000"]
-      allowedOrigins: ["localhost:3001", "localhost:3000"]
-    }
-  }
-}
+      allowedOrigins: ["localhost:3000", "134.209.24.118:3000"],
+    },
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
