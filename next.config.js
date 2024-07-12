@@ -12,7 +12,11 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "134.209.24.118:3000"],
+      allowedOrigins: [
+        "localhost:3000",
+        "134.209.24.118:3000",
+        "api.straca-sa.com",
+      ],
     },
   },
 };
