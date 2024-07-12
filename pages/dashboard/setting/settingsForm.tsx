@@ -6,13 +6,13 @@ import { ContractType } from "@/components/dashboard_components/SettingComponent
 import { CountryType } from "@/components/dashboard_components/SettingComponents/countrycard";
 import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
 import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
-import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehiclecard";
+import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehicleCard";
 import { POST, PUT } from "@/constants/fetchConfig";
 import { PRODUCT_CONFIG_INPUTS } from "@/constants/templates";
 import { Toast } from "@/constants/toastConfig";
 import { useSettings } from "@/context/settingscontext";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const SettingsForm: React.FC = () => {
   const router = useRouter();
@@ -32,10 +32,16 @@ const SettingsForm: React.FC = () => {
   } = useSettings();
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<
-    ProductType | BlogType | CountryType | VehicleType | ContractType | Proximity | null
+    | ProductType
+    | BlogType
+    | CountryType
+    | VehicleType
+    | ContractType
+    | Proximity
+    | null
   >(null);
 
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       (type === "productType" &&
         (label !== selectedProductType?.label ||
@@ -60,8 +66,17 @@ const SettingsForm: React.FC = () => {
     } else {
       setIsChanged(false);
     }
-  };
-
+  }, [
+    description,
+    label,
+    selectedBlogType,
+    selectedContractType,
+    selectedCountryType,
+    selectedProductType,
+    selectedProximity,
+    selectedVehicleType,
+    type,
+  ]);
   useEffect(() => {
     if (action === "new" && typeof type === "string") {
       setActionString("créer");
@@ -108,13 +123,15 @@ const SettingsForm: React.FC = () => {
     selectedBlogType,
     selectedCountryType,
     selectedVehicleType,
+    selectedContractType,
+    selectedProximity,
   ]);
 
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [label, description]);
+  }, [label, description, isModify, wasChanged]);
 
   const addType = async () => {
     const newType = {
@@ -130,7 +147,7 @@ const SettingsForm: React.FC = () => {
 
     try {
       var response;
-      if (isModify === false) {
+      if (!isModify) {
         response = await POST(`/${type}/`, newType);
         router.back();
         Toast.fire({
@@ -150,20 +167,21 @@ const SettingsForm: React.FC = () => {
             Toast.fire({
               icon: "error",
               title: `Aucun champ modifié`,
-          });
+            });
           }
         } catch (error) {
           Toast.fire({
             icon: "error",
-            title: {error},
+            title: { error },
           });
         }
       }
     } catch (error) {
       Toast.fire({
         icon: "error",
-        title: {error},
-      });    }
+        title: { error },
+      });
+    }
   };
 
   return (
@@ -187,7 +205,7 @@ const SettingsForm: React.FC = () => {
           setLabel(e.target.value);
         })}
         {renderSettingsTextField(PRODUCT_CONFIG_INPUTS[1], description, (e) =>
-          setDescription(e.target.value)
+          setDescription(e.target.value),
         )}
       </div>
       <div className="mt-10 flex flex-row gap-5">

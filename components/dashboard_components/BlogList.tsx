@@ -167,8 +167,8 @@ export const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
                   {showGrid ? (
                     // Grid
                     <div className="gap-y-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full">
-                      {blogsData.map((item) => (
-                        <BlogGridCard blog={item} />
+                      {blogsData.map((item, index) => (
+                        <BlogGridCard key={index} blog={item} />
                       ))}
                     </div>
                   ) : (

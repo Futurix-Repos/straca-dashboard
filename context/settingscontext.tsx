@@ -3,7 +3,7 @@ import { ContractType } from "@/components/dashboard_components/SettingComponent
 import { CountryType } from "@/components/dashboard_components/SettingComponents/countrycard";
 import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
 import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
-import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehiclecard";
+import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehicleCard";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 interface SettingsContextProps {
@@ -22,7 +22,7 @@ interface SettingsContextProps {
 }
 
 const SettingsContext = createContext<SettingsContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
@@ -31,7 +31,7 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
   const [selectedProductType, setSelectedProductType] =
     useState<ProductType | null>(null);
   const [selectedBlogType, setSelectedBlogType] = useState<BlogType | null>(
-    null
+    null,
   );
   const [selectedVehicleType, setSelectedVehicleType] =
     useState<VehicleType | null>(null);
@@ -39,8 +39,9 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
     useState<CountryType | null>(null);
   const [selectedContractType, setSelectedContractType] =
     useState<ContractType | null>(null);
-  const [selectedProximity, setSelectedProximity] =
-    useState<Proximity | null>(null);
+  const [selectedProximity, setSelectedProximity] = useState<Proximity | null>(
+    null,
+  );
   return (
     <SettingsContext.Provider
       value={{

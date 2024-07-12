@@ -13,10 +13,11 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 // Use dynamic for lazy loading ReactQuill
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import Image from "next/image";
 interface props {
   selectedBlog: Blog | null;
 }
@@ -33,23 +34,23 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
   const [blogTypes, setBlogTypes] = useState<BlogType[]>([]);
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
-      selectedBlog?.description !== description ||
-      imageFile !== null ||
-      selectedBlog?.title !== title ||
-      selectedBlog?.category !== category
+        selectedBlog?.description !== description ||
+        imageFile !== null ||
+        selectedBlog?.title !== title ||
+        selectedBlog?.category !== category
     ) {
       setIsChanged(true);
     } else {
       setIsChanged(false);
     }
-  };
+  }, [category, description, imageFile, selectedBlog, title]);
   useEffect(() => {
-    if (isModify === true) {
+    if (isModify) {
       wasChanged();
     }
-  }, [description, category, imageFile, title]);
+  }, [description, category, imageFile, title, isModify, wasChanged]);
   useEffect(() => {
     const fetchBlogTypes = async () => {
       try {
@@ -72,14 +73,14 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   }, [action,]);
 
   useEffect(() => {
-    if (isModify === true) {
+    if (isModify) {
       setTitle(selectedBlog?.title ?? "");
       console.log(`selblog==>${selectedBlog?.description}`);
       // setImageFile(selectedBlog?.image ?? null);
       setCategory(selectedBlog?.category ?? "");
       setDescription(selectedBlog?.description ?? "");
     }
-  }, [isModify]);
+  }, [selectedBlog, isModify]);
   console.log(`blog====>${blogTypes.length}`);
 
 
@@ -215,7 +216,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                 </div>
                 {(imageFile || (isModify && selectedBlog?.image)) ? (
                   <div className="flex flex-row items-center gap-3">
-                    <img
+                    <Image
                       src={imageFile ? URL.createObjectURL(imageFile) : (selectedBlog?.image ? selectedBlog?.image.toString() : '')}
                       alt="Selected Blog Image"
                       className="w-20 h-20 object-cover"

@@ -9,9 +9,7 @@ import {
 } from "@/constants/templates";
 import { Toast } from "@/constants/toastConfig";
 import router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface Props {
   selectedClient: Client | null;
@@ -30,7 +28,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       email !== selectedClient?.email ||
       phone !== selectedClient?.phone ||
@@ -45,7 +43,16 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
     } else {
       return setIsChanged(false);
     }
-  };
+  }, [
+    action,
+    company,
+    email,
+    firstName,
+    lastName,
+    password,
+    phone,
+    selectedClient,
+  ]);
   useEffect(() => {
     if (action === "edit") {
       setIsModify(true);
@@ -57,18 +64,25 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         setPhone(selectedClient?.phone ?? "");
       }
     }
-  }, [isModify]);
-
+  }, [action, isModify, selectedClient]);
 
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [email, password, firstName, lastName, company, phone]);
-
+  }, [
+    email,
+    password,
+    firstName,
+    lastName,
+    company,
+    phone,
+    isModify,
+    wasChanged,
+  ]);
 
   const addClient = async () => {
-    setShowLoadingModal(true)
+    setShowLoadingModal(true);
     try {
       const newClient = {
         firstName: firstName,
@@ -99,9 +113,8 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
       var response;
       if (!isModify) {
         response = await POST(`/auth/signup`, newClient);
-        
       } else {
-        if(!isChanged) {
+        if (!isChanged) {
           Toast.fire({
             icon: "error",
             title: `Les champs n'ont pas été modifiés`,
@@ -123,7 +136,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         icon: "error",
         title: `Error: ${errorMessage}`,
       });
-    } finally{
+    } finally {
       setShowLoadingModal(false);
     }
   };
@@ -138,7 +151,9 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         >
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
-        <p className="ml-2 font-semibold text-2xl">{isModify ? `Modifier` : "Creer"} un client</p>
+        <p className="ml-2 font-semibold text-2xl">
+          {isModify ? `Modifier` : "Creer"} un client
+        </p>
       </div>
       <div className="pt-5">
         <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
@@ -152,23 +167,23 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
           <div className="flex flex-col gap-5">
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(CLIENTS_CONFIG_INPUTS[0], email, (e) =>
-                setEmail(e.target.value)
+                setEmail(e.target.value),
               )}
               {renderInputField(CLIENTS_CONFIG_INPUTS[1], phone, (e) =>
-                setPhone(e.target.value)
+                setPhone(e.target.value),
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(CLIENTS_CONFIG_INPUTS[2], lastName, (e) =>
-                setLastName(e.target.value)
+                setLastName(e.target.value),
               )}
               {renderInputField(CLIENTS_CONFIG_INPUTS[3], firstName, (e) =>
-                setFirstName(e.target.value)
+                setFirstName(e.target.value),
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(CLIENTS_CONFIG_INPUTS[4], company, (e) =>
-                setCompany(e.target.value)
+                setCompany(e.target.value),
               )}
               {action === "new" &&
                 renderInputField(
@@ -179,7 +194,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
                   undefined,
                   undefined,
                   showPass,
-                  setShowPass
+                  setShowPass,
                 )}
             </div>
             <center>
@@ -193,7 +208,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
           </div>
         </div>
       </div>
-      <LaodingModal isOpen={showLoadingModal}/>
+      <LaodingModal isOpen={showLoadingModal} />
       {/* Form */}
     </div>
   );

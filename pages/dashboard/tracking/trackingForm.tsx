@@ -14,7 +14,7 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 interface props {
   selectedTracking: Tracking | null;
@@ -32,10 +32,16 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
   // Attention
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     console.log("Selected Tracking:", selectedTracking);
-    console.log("Form values:", { name, brand, type, registrationNumber, orderId });
-  
+    console.log("Form values:", {
+      name,
+      brand,
+      type,
+      registrationNumber,
+      orderId,
+    });
+
     if (
       selectedTracking?.name !== name ||
       selectedTracking?.brand !== brand ||
@@ -47,13 +53,22 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
     } else {
       setIsChanged(false);
     }
-  };
-  
+  }, [brand, name, orderId, registrationNumber, selectedTracking, type]);
+
   useEffect(() => {
     if (isModify === true) {
       wasChanged();
     }
-  }, [name, brand, registrationNumber, type, selectedTracking, orderId]);
+  }, [
+    name,
+    brand,
+    registrationNumber,
+    type,
+    selectedTracking,
+    orderId,
+    isModify,
+    wasChanged,
+  ]);
 
   useEffect(() => {
     if (action === "edit") {
@@ -71,7 +86,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
       setBrand(selectedTracking?.brand ?? "");
       setOrderId(selectedTracking?.orderId ?? "");
     }
-  }, [isModify]);
+  }, [selectedTracking, isModify]);
 
   // Function to add blog
   const addTracking = async () => {
@@ -130,7 +145,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
       console.log(
         `Gestion et suivi de flotte ${
           isModify ? "édité" : "ajouté"
-        } avec succès!!`
+        } avec succès!!`,
       );
       router.back();
       Toast.fire({
@@ -143,8 +158,8 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
       console.error("Error adding tracking:", error);
       Toast.fire({
         icon: "error",
-        title: error.response?.data?.message
-    });
+        title: error.response?.data?.message,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -181,7 +196,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
                 (e) => setName(e.target.value),
                 undefined,
                 undefined,
-                "w-full"
+                "w-full",
               )}
               {renderInputField(
                 TRACKING_INPUT[1],
@@ -189,7 +204,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
                 (e) => setBrand(e.target.value),
                 undefined,
                 undefined,
-                "w-full"
+                "w-full",
               )}
               {renderInputField(
                 TRACKING_INPUT[3],
@@ -197,7 +212,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
                 (e) => setOrderId(e.target.value),
                 undefined,
                 undefined,
-                "w-full"
+                "w-full",
               )}
               {renderInputField(
                 TRACKING_INPUT[2],
@@ -205,7 +220,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
                 (e) => setType(e.target.value),
                 undefined,
                 undefined,
-                "w-full"
+                "w-full",
               )}
               {renderInputField(
                 TRACKING_INPUT[4],
@@ -213,7 +228,7 @@ const TrackingForm: React.FC<props> = ({ selectedTracking }) => {
                 (e) => setRegistrationNumber(e.target.value),
                 undefined,
                 undefined,
-                "w-full"
+                "w-full",
               )}
             </div>
             <center>

@@ -6,9 +6,8 @@ import { POST, PUT } from "@/constants/fetchConfig";
 import { JOB_INPUTS, USER_CONFIG_INPUTS } from "@/constants/templates";
 import { Toast } from "@/constants/toastConfig";
 import router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { useCallback, useEffect, useState } from "react";
+
 interface Props {
   selectedEmployee: Employee | null;
 }
@@ -26,7 +25,7 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
   const { action } = router.query;
   const [isModify, setIsModify] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       email !== selectedEmployee?.email ||
       phone !== selectedEmployee?.phone ||
@@ -41,7 +40,16 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
     } else {
       return setIsChanged(false);
     }
-  };
+  }, [
+    action,
+    email,
+    firstName,
+    lastName,
+    password,
+    phone,
+    selectedEmployee,
+    title,
+  ]);
   useEffect(() => {
     if (action === "edit") {
       setIsModify(true);
@@ -53,12 +61,21 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
         setPhone(selectedEmployee?.phone ?? "");
       }
     }
-  }, [isModify]);
+  }, [selectedEmployee, isModify, action]);
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [email, password, firstName, lastName, title, phone]);
+  }, [
+    email,
+    password,
+    firstName,
+    lastName,
+    title,
+    phone,
+    isModify,
+    wasChanged,
+  ]);
   const addEmployee = async () => {
     setModalOpened(true);
     try {
@@ -94,15 +111,15 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
       if (!isModify) {
         response = await POST(`/auth/signup`, newEmployee);
       } else {
-        if(!isChanged) {
-            Toast.fire({
-              icon: "error",
-              title: `Les champs n'ont pas été modifiés`,
-            });
-          }
+        if (!isChanged) {
+          Toast.fire({
+            icon: "error",
+            title: `Les champs n'ont pas été modifiés`,
+          });
+        }
         response = await PUT(
           `/employees/${selectedEmployee?._id}`,
-          newEmployee
+          newEmployee,
         );
       }
 
@@ -133,7 +150,9 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
         >
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
-        <p className="ml-2 font-semibold text-2xl">{isModify ? `Modifier` : "Creer"} un collaborateur</p>
+        <p className="ml-2 font-semibold text-2xl">
+          {isModify ? `Modifier` : "Creer"} un collaborateur
+        </p>
       </div>
       <div className="pt-5">
         <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
@@ -147,23 +166,23 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
           <div className="flex flex-col gap-5">
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(USER_CONFIG_INPUTS[0], email, (e) =>
-                setEmail(e.target.value)
+                setEmail(e.target.value),
               )}
               {renderInputField(USER_CONFIG_INPUTS[1], phone, (e) =>
-                setPhone(e.target.value)
+                setPhone(e.target.value),
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(USER_CONFIG_INPUTS[2], lastName, (e) =>
-                setLastName(e.target.value)
+                setLastName(e.target.value),
               )}
               {renderInputField(USER_CONFIG_INPUTS[3], firstName, (e) =>
-                setFirstName(e.target.value)
+                setFirstName(e.target.value),
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(USER_CONFIG_INPUTS[4], title, (e) =>
-                setTitle(e.target.value)
+                setTitle(e.target.value),
               )}
               {action == "new" &&
                 renderInputField(
@@ -174,7 +193,7 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
                   undefined,
                   undefined,
                   showPass,
-                  setShowPass
+                  setShowPass,
                 )}
             </div>
             <center>

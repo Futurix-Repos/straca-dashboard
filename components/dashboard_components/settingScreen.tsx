@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { DELETE } from "@/constants/fetchConfig";
-import VehicleCard, { VehicleType } from "./SettingComponents/vehiclecard";
+import VehicleCard, { VehicleType } from "./SettingComponents/vehicleCard";
 import ProductCard, { ProductType } from "./SettingComponents/productcard";
 import CountryCard, { CountryType } from "./SettingComponents/countrycard";
 import BlogCard, { BlogType } from "./SettingComponents/blogcard";

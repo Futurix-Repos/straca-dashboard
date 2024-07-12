@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface DropdownProps<T extends { _id: string; label?: string; firstName?: string; imageUrl?: string }> {
   input: {
@@ -42,7 +43,7 @@ const DropdownComponent = <T extends {
             <option key={item._id} value={item.firstName || item.label || ""}>
               {/* Display both image and text */}
               <span style={{ display: 'flex', alignItems: 'center' }}>
-                {item.imageUrl && <img src={item.imageUrl} alt={item.label} style={{ width: '24px', marginRight: '8px' }} />}
+                {item.imageUrl && <Image src={item.imageUrl} alt={item.label ?? ""} style={{ width: '24px', marginRight: '8px' }} />}
                 {item.flag} {/* Render the flag emoji */}
                 &nbsp; {/* Add space between the flag and country name */}
                 {item.firstName || item.label || ""}

@@ -131,7 +131,7 @@ export const UpdateUserPermissionModal: React.FC<UpdateUserPermissionModalProps>
 
         }
 
-    }, [selectedUser, userPermissions]);
+    }, [onClose, router, selectedUser, userPermissions]);
 
     if (!selectedUser) return null;
 

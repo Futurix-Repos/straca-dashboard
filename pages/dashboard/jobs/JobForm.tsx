@@ -4,10 +4,9 @@ import { GET, POST, PUT } from "@/constants/fetchConfig";
 import { JOB_INPUTS } from "@/constants/templates";
 import { Toast } from "@/constants/toastConfig";
 import router from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // Use dynamic for lazy loading ReactQuill
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
 import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
@@ -23,7 +22,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
   const [proximity, setLocation] = useState<Proximity | null>(null);
   const [contractType, setContractType] = useState<ContractType | null>(null);
   const [description, setDescription] = useState("");
-  console.log(`==>${selectedJob?.proximity}`)
+  console.log(`==>${selectedJob?.proximity}`);
 
   // Dropdown data
   const [proximityList, setProximityList] = useState<Proximity[]>([]);
@@ -32,7 +31,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
   // Attention
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       post !== selectedJob?.post ||
       salary !== selectedJob?.salary.toString() ||
@@ -44,7 +43,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
     } else {
       setIsChanged(false);
     }
-  };
+  }, [contractType, description, post, proximity, salary, selectedJob]);
 
   useEffect(() => {
     const { action } = router.query;
@@ -57,13 +56,21 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
       setContractType(selectedJob?.contractType!);
       setDescription(selectedJob?.description ?? "");
     }
-  }, [isModify]);
+  }, [selectedJob, isModify]);
 
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [post, salary, proximity, contractType, description]);
+  }, [
+    post,
+    salary,
+    proximity,
+    contractType,
+    description,
+    isModify,
+    wasChanged,
+  ]);
 
   // Function to add job
   const addJob = async () => {
@@ -78,9 +85,9 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
         status: "test",
       };
 
-      console.log("st.")
-      console.log(newJob)
-      console.log("st.")
+      console.log("st.");
+      console.log(newJob);
+      console.log("st.");
 
       // Perform validation to check if all variables are not empty
       if (
@@ -93,7 +100,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
         Toast.fire({
           icon: "error",
           title: `Merci de remplir tous les champs`,
-      });
+        });
         return;
       }
 
@@ -117,13 +124,12 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
         icon: "success",
         title: `Job ${isModify ? "édité" : "ajouté"} avec succès!`,
       });
-  
     } catch (error) {
       console.error("Error adding job:", error);
       Toast.fire({
         icon: "error",
-        title: {error},
-    });
+        title: { error },
+      });
       // Handle errors
     }
   };
@@ -157,7 +163,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
 
     fetchProximityList();
     fetchContractTypeList();
-  }, []);
+  }, [contractTypeList, proximityList]);
 
   return (
     <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
@@ -170,16 +176,14 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
         >
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
-        <p className="ml-2 font-semibold text-2xl">
-          Créer un offre
-        </p>
+        <p className="ml-2 font-semibold text-2xl">Créer un offre</p>
       </div>
       <div className="pt-5">
         <div className="px-4 py-3 pb-10 mb-10 bg-[#FAFBFF] rounded-[12px]">
           <div className="mb-5 flex flex-row justify-between items-center">
             <div className="flex flex-row justify-between">
               <p className="mb-3 font-semibold text-2xl">
-                Ajouter un offre d'emploi
+                {"Ajouter un offre d'emploi"}
               </p>
             </div>
           </div>
@@ -187,10 +191,10 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
           <div className="flex flex-col gap-5">
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               {renderInputField(JOB_INPUTS[0], post, (e) =>
-                setPost(e.target.value)
+                setPost(e.target.value),
               )}
               {renderInputField(JOB_INPUTS[1], salary, (e) =>
-                setSalary(e.target.value)
+                setSalary(e.target.value),
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
@@ -203,9 +207,9 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
                 value={proximity?.label}
                 selectList={proximityList}
                 handleSelect={(val) => {
-                  console.log("mik")
-                  console.log(val)
-                  console.log("mik")
+                  console.log("mik");
+                  console.log(val);
+                  console.log("mik");
                   setLocation(val!);
                 }}
                 className=""

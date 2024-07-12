@@ -2,7 +2,7 @@ import { renderInputField } from "@/components/InputComponents/InputComponents";
 import DropdownComponent from "@/components/InputComponents/dropdowncomponent";
 import { Client } from "@/components/dashboard_components/ClientList";
 import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
-import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehiclecard";
+import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehicleCard";
 import { GET } from "@/constants/fetchConfig";
 import { ADD_ORDER_INPUTS } from "@/constants/templates";
 import router from "next/router";
@@ -163,7 +163,7 @@ const OrderForm = () => {
     fetchProductTypes();
     fetchVehicleTypes();
     fetchClients();
-  }, []);
+  }, [clientsList, productTypes]);
   const backgroundImage =
     "https://s3-alpha-sig.figma.com/img/e820/b309/33faaf77f8af260428a9b35d9f503bf6?Expires=1709510400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cuKH-bisdmxyI9xwNl09-7tWsQIFEV9A6HkbVZ60UdB8iNYoNwZkxyGPB~GnBJnfmHUl-KXNeGS-7skVzZqqnYLxSyIeGPXmGvNqlszXkEpGQwgRbGv4QJQj~emtO4aiKNMIxU7ncab6tXkEL4NltsI44oHc0g7oAPGb~GsreJ-TExtg-G71j5dQZ~44xaU~bwzfIRRrXw8ezKy7xSTaHvW~spqq8OpPHFtB0k8OjUGCu6lIDgBDWFi1rDPZvRsKMKTHCG1CE6fA9XlWjOwHT3rU54qQnuT37YBFq9GWoP91Xprwzd2fUdVzSiuY6SbJCzVbFN2CFpFxUHsMZxLVzg__";
 
@@ -234,7 +234,7 @@ const OrderForm = () => {
               </div>
               <div className="flex w-full justify-between items-start gap-[18px] relative flex-[0_0_auto]">
                 <div className="w-[50%] flex justify-start gap-12">
-                <DatePicker
+                  <DatePicker
                     selected={endDate}
                     onChange={handleEndDateChange}
                     dateFormat="dd/MM/yyyy"
@@ -245,7 +245,7 @@ const OrderForm = () => {
                     (e) => setWeight(e.target.value),
                     undefined,
                     undefined,
-                    "w-[20%]"
+                    "w-[20%]",
                   )}
                   {renderInputField(
                     ADD_ORDER_INPUTS[5],
@@ -253,7 +253,7 @@ const OrderForm = () => {
                     (e) => setVolume(e.target.value),
                     undefined,
                     undefined,
-                    "w-[20%]"
+                    "w-[20%]",
                   )}
                   {renderInputField(
                     ADD_ORDER_INPUTS[6],
@@ -261,7 +261,7 @@ const OrderForm = () => {
                     (e) => setPrice(e.target.value),
                     undefined,
                     undefined,
-                    "w-[30%]"
+                    "w-[30%]",
                   )}
                 </div>
                 <div className="w-[30%]">
@@ -357,7 +357,7 @@ const OrderForm = () => {
                 (e) => setPhone(e.target.value),
                 undefined,
                 undefined,
-                "w-[40%]"
+                "w-[40%]",
               )}
             </div>
             {renderInputField(
@@ -366,7 +366,7 @@ const OrderForm = () => {
               (e) => setEmail(e.target.value),
               undefined,
               undefined,
-              "w-[65%]"
+              "w-[65%]",
             )}
           </div>
         </div>
@@ -384,7 +384,7 @@ const OrderForm = () => {
               (e) => setClientAddress(e.target.value),
               undefined,
               undefined,
-              "w-full"
+              "w-full",
             )}
             {renderInputField(
               ADD_ORDER_INPUTS[14],
@@ -392,7 +392,7 @@ const OrderForm = () => {
               (e) => setSearchKeyword1(e.target.value),
               undefined,
               undefined,
-              "w-full"
+              "w-full",
             )}
             <div
               className="w-full h-72 rounded-lg bg-slate-400"
@@ -422,7 +422,7 @@ const OrderForm = () => {
                 (e) => setLat1(e.target.value),
                 undefined,
                 undefined,
-                "w-[45%]"
+                "w-[45%]",
               )}
               {renderInputField(
                 ADD_ORDER_INPUTS[16],
@@ -430,7 +430,7 @@ const OrderForm = () => {
                 (e) => setLon1(e.target.value),
                 undefined,
                 undefined,
-                "w-[45%]"
+                "w-[45%]",
               )}
             </div>
           </div>
@@ -451,7 +451,7 @@ const OrderForm = () => {
               (e) => setSearchKeyword2(e.target.value),
               undefined,
               undefined,
-              "w-full"
+              "w-full",
             )}
             {renderInputField(
               ADD_ORDER_INPUTS[18],
@@ -459,7 +459,7 @@ const OrderForm = () => {
               (e) => setLat2(e.target.value),
               undefined,
               undefined,
-              "w-full"
+              "w-full",
             )}
             <div
               className="w-full h-72 rounded-lg bg-slate-400"
@@ -489,7 +489,7 @@ const OrderForm = () => {
                 (e) => setLon2(e.target.value),
                 undefined,
                 undefined,
-                "w-[45%]"
+                "w-[45%]",
               )}
               {renderInputField(
                 ADD_ORDER_INPUTS[20],
@@ -497,7 +497,7 @@ const OrderForm = () => {
                 (e) => setPrice(e.target.value),
                 undefined,
                 undefined,
-                "w-[45%]"
+                "w-[45%]",
               )}
             </div>
           </div>

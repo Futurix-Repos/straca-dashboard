@@ -101,7 +101,7 @@ export const JobListComponent: React.FC<Props> = ({ setSelectedJob }) => {
     <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
       <div className="flex flex-row justify-between items-center">
         <p className="mb-3 font-semibold text-2xl">
-          Gestion des offres d'emplois
+          {"Gestion des offres d'emplois"}
         </p>
         <button
           onClick={toggleShowModal}
@@ -123,7 +123,7 @@ export const JobListComponent: React.FC<Props> = ({ setSelectedJob }) => {
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row justify-between">
               <p className="mb-3 font-semibold text-2xl">
-                Liste des offres d'emplois
+                {"Liste des offres d'emplois"}
               </p>
             </div>
             <div className="relative w-[50%]">
