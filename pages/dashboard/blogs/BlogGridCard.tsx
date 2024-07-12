@@ -11,7 +11,7 @@ const BlogGridCard = ({ blog }: { blog: Blog }) => {
       <div
         className="h-36 bg-black rounded-sm"
         style={{
-          backgroundImage: `url(${""})`,
+          backgroundImage: `url("https://placehold.co/600x400")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
