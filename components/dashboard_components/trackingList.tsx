@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 // import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
 import router, { useRouter } from "next/router";
-import BlogGridCard from "@/pages/dashboard/blogs/BlogGridCard";
+
 import { DELETE, GET } from "@/constants/fetchConfig";
 import { Toast } from "@/constants/toastConfig";
 import DeleteCountryModal from "@/components/dashboard_components/SettingComponents/SettingPopups/DeleteCountryModal";
@@ -23,8 +23,9 @@ interface props {
   setSelectedTracking: (item: Tracking) => void;
 }
 
-export const TrackingListComponent: React.FC<props> = ({ setSelectedTracking}) => {
-
+export const TrackingListComponent: React.FC<props> = ({
+  setSelectedTracking,
+}) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +56,6 @@ export const TrackingListComponent: React.FC<props> = ({ setSelectedTracking}) =
 
   const [itemId, setItemId] = useState("");
 
-
   const handleDeleteItem = async () => {
     try {
       console.log(`Deleting tracking with ID: ${itemId}`);
@@ -64,14 +64,14 @@ export const TrackingListComponent: React.FC<props> = ({ setSelectedTracking}) =
       Toast.fire({
         icon: "success",
         title: `Supprimé avec succès`,
-    });
+      });
       router.reload();
     } catch (error) {
       console.error(`Error deleting:`, error);
       Toast.fire({
         icon: "error",
         title: `Échec de la suppression`,
-    });
+      });
     }
   };
 
@@ -79,16 +79,16 @@ export const TrackingListComponent: React.FC<props> = ({ setSelectedTracking}) =
   const fetchTrackingData = useCallback(async () => {
     try {
       const response = await GET(
-        `/tracking${searchText.length > 0 ? `?search=${searchText}` : ""}`
+        `/tracking${searchText.length > 0 ? `?search=${searchText}` : ""}`,
       );
-console.log(response.body);
+      console.log(response.body);
       const data: Tracking[] = response;
       // Set the fetched data into state
       setTrackingData(data);
     } catch (error) {
       Toast.fire({
         icon: "error",
-        title: {error},
+        title: { error },
       });
       console.error("Error fetching data:", error);
       // Handle errors
@@ -122,7 +122,9 @@ console.log(response.body);
         <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row justify-between">
-              <p className="mb-3 font-semibold text-2xl">Liste des gestion de flotte</p>
+              <p className="mb-3 font-semibold text-2xl">
+                Liste des gestion de flotte
+              </p>
             </div>
             <div className="flex flex-row w-[60%] justify-between">
               <div className="relative w-[90%]">
@@ -139,7 +141,6 @@ console.log(response.body);
                   }}
                 />
               </div>
-            
             </div>
           </div>
 
@@ -149,59 +150,49 @@ console.log(response.body);
             <div className="flex flex-col rounded-[12px] border-blue-600">
               <div className="inline-flex flex-col items-start gap-[16px]">
                 <div className="container mx-auto mt-8">
-                    <table className="min-w-full">
-                      <thead>
-                        <tr className="text-gray-500">
-                          <th className="py-2 px-4 border-b">Suivi Id</th>
-                          <th className="py-2 px-4 border-b">Nom</th>
-                          <th className="py-2 px-4 border-b">Type</th>
-                          <th className="py-2 px-4 border-b">N Imatriculation</th>
-                          <th className="py-2 px-4 border-b">
-                            Marque
-                          </th>
-                          <th className="py-2 px-4 border-b">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          trackingData.map((item) => {
-                            return (
-                              <tr key={item._id}>
-                                <td className="py-2 px-4 border-b">{item._id}</td>
-                                <td className="py-2 px-4 border-b">
-                                  {item.name}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  {item.type}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  {item.registrationNumber}
-                                </td>
-                                <td className="py-2 px-4 border-b">
-                                  {item.brand}
-                                </td>                        
-                                <td className="py-2 px-4 border-b text-center">
-                                  {/* Add your action buttons or links here */}
-                                  <i
-                                    onClick={() => {
-                                      setItemId(item._id);
-                                      toggleShowDeleteModal();
-                                    }}
-                                    className="fa-regular fa-trash-can text-red-600"
-                                  ></i>
-                                  <i
-                                    onClick={() => {
-                                      handleModify(item);
-                                    }}
-                                    className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
-                                  ></i>
-                                </td>
-                              </tr>
-                            )
-                          })
-                        }
-                      </tbody>
-                    </table>
+                  <table className="min-w-full">
+                    <thead>
+                      <tr className="text-gray-500">
+                        <th className="py-2 px-4 border-b">Suivi Id</th>
+                        <th className="py-2 px-4 border-b">Nom</th>
+                        <th className="py-2 px-4 border-b">Type</th>
+                        <th className="py-2 px-4 border-b">N Imatriculation</th>
+                        <th className="py-2 px-4 border-b">Marque</th>
+                        <th className="py-2 px-4 border-b">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {trackingData.map((item) => {
+                        return (
+                          <tr key={item._id}>
+                            <td className="py-2 px-4 border-b">{item._id}</td>
+                            <td className="py-2 px-4 border-b">{item.name}</td>
+                            <td className="py-2 px-4 border-b">{item.type}</td>
+                            <td className="py-2 px-4 border-b">
+                              {item.registrationNumber}
+                            </td>
+                            <td className="py-2 px-4 border-b">{item.brand}</td>
+                            <td className="py-2 px-4 border-b text-center">
+                              {/* Add your action buttons or links here */}
+                              <i
+                                onClick={() => {
+                                  setItemId(item._id);
+                                  toggleShowDeleteModal();
+                                }}
+                                className="fa-regular fa-trash-can text-red-600"
+                              ></i>
+                              <i
+                                onClick={() => {
+                                  handleModify(item);
+                                }}
+                                className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
+                              ></i>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

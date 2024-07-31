@@ -11,8 +11,9 @@ export interface BlogType {
   _id: string;
   label: string;
   description: string;
+  slug: string;
 }
-export const BlogCard: React.FC = ({ }) => {
+export const BlogCard: React.FC = ({}) => {
   const router = useRouter();
   const { action } = router.query;
   const [blogTypesData, setBlogTypesData] = useState<BlogType[]>([]);
@@ -27,10 +28,10 @@ export const BlogCard: React.FC = ({ }) => {
   const fetchBlogTypes = useCallback(async () => {
     try {
       const response = await GET(
-        `/blogType${searchText.length > 0 ? `?search=${searchText}` : ""}`
+        `/blogType${searchText.length > 0 ? `?search=${searchText}` : ""}`,
       );
       console.log(
-        `/blogType${searchText.length > 0 ? `?search=${searchText}` : ""}`
+        `/blogType${searchText.length > 0 ? `?search=${searchText}` : ""}`,
       );
       const data: BlogType[] = response;
       setBlogTypesData(data);
@@ -64,7 +65,6 @@ export const BlogCard: React.FC = ({ }) => {
     } catch (error) {
       console.log(error);
     }
-
   };
 
   return (
@@ -126,7 +126,6 @@ export const BlogCard: React.FC = ({ }) => {
                         </button>
                         <button
                           onClick={() => {
-
                             setItemId(item._id);
                             toggleShowDeleteModal();
                           }}

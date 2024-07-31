@@ -1,17 +1,27 @@
 import { Blog } from "@/components/dashboard_components/BlogList";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface BlogGridCardProps {
   blog: Blog;
+  handleModify: (item: Blog) => void;
+  setItemToDelete: Dispatch<SetStateAction<string>>;
+  toggleShowDeleteModal: () => void;
 }
 
-const BlogGridCard = ({ blog }: { blog: Blog }) => {
+const BlogGridCard = ({
+  blog,
+  handleModify,
+  setItemToDelete,
+  toggleShowDeleteModal,
+}: BlogGridCardProps) => {
   return (
     <div className="flex flex-col w-[258px] px-3 py-4 gap-4 rounded-sm bg-white border border-[#D9D9D9]">
       <div
         className="h-36 bg-black rounded-sm"
         style={{
-          backgroundImage: `url("https://placehold.co/600x400")`,
+          backgroundImage: `url("${
+            blog.image ? blog.image.toString() : "https://placehold.co/600x400"
+          }")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -22,6 +32,22 @@ const BlogGridCard = ({ blog }: { blog: Blog }) => {
         </div>
         <h4 className="font-bold pr-16">{blog?.title ?? ""}</h4>
         <p className="font-light text-sm">{blog?.createdAt ?? ""}</p>
+      </div>
+      <div className="my-auto text-center flex flex-row">
+        {/* Add your action buttons or links here */}
+        <i
+          onClick={() => {
+            setItemToDelete(blog._id);
+            toggleShowDeleteModal();
+          }}
+          className="fa-regular fa-trash-can text-red-600"
+        ></i>
+        <i
+          onClick={() => {
+            handleModify(blog);
+          }}
+          className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
+        ></i>
       </div>
     </div>
   );

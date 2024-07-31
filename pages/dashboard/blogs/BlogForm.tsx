@@ -13,11 +13,13 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import router, { useRouter } from "next/router";
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 // Use dynamic for lazy loading ReactQuill
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import Image from "next/image";
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
 interface props {
   selectedBlog: Blog | null;
 }
@@ -34,12 +36,65 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
   const [blogTypes, setBlogTypes] = useState<BlogType[]>([]);
+
+  // For quill
+  const [range, setRange] = useState();
+  const [lastChange, setLastChange] = useState();
+  const [readOnly, setReadOnly] = useState(false);
+  // Use a ref to access the quill instance directly
+  const modules = {
+    toolbar: [
+      [{ font: [] }],
+      [{ size: ["small", false, "large", "huge"] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      ["bold", "italic", "underline", "strike"],
+      ["blockquote", "code-block"],
+      [{ align: [] }],
+
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+
+      ["link", "image", "video"],
+      [{ color: [] }, { background: [] }],
+
+      ["clean"],
+    ],
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+  const formats = [
+    "font",
+    "blockquote",
+    "code-block",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "align",
+    "list",
+    "indent",
+    "size",
+    "header",
+    "link",
+    "image",
+    "video",
+    "color",
+    "background",
+    "clean",
+  ];
+  const { quill, quillRef } = useQuill({
+    placeholder: "Ecrivez votre blog",
+    modules,
+    formats,
+  });
   const wasChanged = useCallback(() => {
     if (
-        selectedBlog?.description !== description ||
-        imageFile !== null ||
-        selectedBlog?.title !== title ||
-        selectedBlog?.category !== category
+      selectedBlog?.description !== description ||
+      imageFile !== null ||
+      selectedBlog?.title !== title ||
+      selectedBlog?.category.label !== category
     ) {
       setIsChanged(true);
     } else {
@@ -70,19 +125,34 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
     } else {
       setIsModify(false); // Reset to false if selectedBlog is null or action is not "edit"
     }
-  }, [action,]);
+  }, [action]);
 
   useEffect(() => {
     if (isModify) {
       setTitle(selectedBlog?.title ?? "");
       console.log(`selblog==>${selectedBlog?.description}`);
       // setImageFile(selectedBlog?.image ?? null);
-      setCategory(selectedBlog?.category ?? "");
+      setCategory(selectedBlog?.category.label ?? "");
       setDescription(selectedBlog?.description ?? "");
     }
   }, [selectedBlog, isModify]);
   console.log(`blog====>${blogTypes.length}`);
 
+  useEffect(() => {
+    if (quill) {
+      quill.clipboard.dangerouslyPasteHTML(
+        isModify ? selectedBlog?.description ?? "" : "",
+      );
+    }
+  }, [quill, selectedBlog?.description]);
+
+  useEffect(() => {
+    if (quill) {
+      quill.on("text-change", (delta, oldDelta, source) => {
+        setDescription(quill.root.innerHTML);
+      });
+    }
+  }, [quill]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -103,10 +173,12 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
     console.log(session?.user.id);
 
     try {
-
       const formData = new FormData();
       formData.append("title", title);
-      formData.append("category", category);
+      formData.append(
+        "category",
+        blogTypes.find((type) => type.label === category)?._id ?? "",
+      );
       formData.append("description", description);
       formData.append("status", isPublish ? "published" : "drafted");
       formData.append("createdBy", currentUser.id);
@@ -123,7 +195,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
         Toast.fire({
           icon: "error",
           title: `Merci de remplir tous les champs`,
-      });
+        });
         return;
       }
 
@@ -131,7 +203,6 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
       if (!isModify) {
         response = await POST(`/blogs`, formData);
       } else {
-
         if (isChanged === false) {
           return Toast.fire({
             icon: "error",
@@ -153,8 +224,8 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
       console.error("Error adding blog:", error);
       Toast.fire({
         icon: "error",
-        title: {error},
-    });
+        title: { error },
+      });
     } finally {
       if (isPublish) {
         setIsPublishing(false);
@@ -167,6 +238,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   const handleDropdownChange = (event: any) => {
     setCategory(event.target.value);
   };
+
   return (
     <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
       <div className="flex flex-row justify-start items-center">
@@ -179,7 +251,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
         <p className="ml-2 font-semibold text-2xl">
-          {isModify ? `Modifier` : `Creer`} un blog {isChanged.toString()}
+          {isModify ? `Modifier` : `Creer`} un blog
         </p>
       </div>
       <div className="w-full flex flex-col gap-5">
@@ -191,35 +263,21 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
               </div>
             </div>
             <div className="flex flex-col gap-5 items-center">
-              {renderInputField(
-                BLOG_INPUTS[0],
-                title,
-                (e) => setTitle(e.target.value),
-                undefined,
-                undefined,
-                "w-full"
-              )}
-
-              <div className="flex w-full justify-between items-start gap-[18px] relative flex-[0_0_auto]">
-                <div className="w-[30%]">
-                  <DropdownComponent
-                    input={{
-                      id: "category",
-                      label: "Catégorie",
-                      placeholder: "Select a category", // Optional placeholder
-                    }}
-                    value={category}
-                    handleSelect={handleDropdownChange}
-                    selectList={blogTypes}
-                    className="w-full"
-                  />
-                </div>
-                {(imageFile || (isModify && selectedBlog?.image)) ? (
+              <div className="flex w-full items-start  relative ">
+                {imageFile || (isModify && selectedBlog?.image) ? (
                   <div className="flex flex-row items-center gap-3">
                     <Image
-                      src={imageFile ? URL.createObjectURL(imageFile) : (selectedBlog?.image ? selectedBlog?.image.toString() : '')}
+                      src={
+                        imageFile
+                          ? URL.createObjectURL(imageFile)
+                          : selectedBlog?.image
+                            ? selectedBlog?.image.toString()
+                            : ""
+                      }
                       alt="Selected Blog Image"
-                      className="w-20 h-20 object-cover"
+                      className="w-40 h-40 object-cover"
+                      width="100"
+                      height="100"
                     />
                     <div className="w-80 bg-white p-6 rounded-md shadow-md">
                       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -229,6 +287,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                         type="file"
                         id="fileInput"
                         name="fileInput"
+                        accept="image/*"
                         onChange={(e) => {
                           handleImageChange(e);
                         }}
@@ -237,7 +296,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
+                  <div className="max-w-md bg-white p-6 rounded-md shadow-md">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                       Choisissez un image du couverture:
                     </label>
@@ -252,25 +311,38 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                     />
                   </div>
                 )}
+              </div>
 
-                {/* <div className="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
-                  <label className="block text-gray-700 text-sm font-bold mb-2">
-                    Choose a file:
-                  </label>
-                  <input
-                    type="file"
-                    id="fileInput"
-                    name="fileInput"
-                    onChange={(e) => {
-                      handleImageChange(e);
+              <div className="flex w-full justify-between items-start gap-[18px] relative flex-[0_0_auto]">
+                {renderInputField(
+                  BLOG_INPUTS[0],
+                  title,
+                  (e) => setTitle(e.target.value),
+                  undefined,
+                  undefined,
+                  "w-1/2",
+                )}
+                <div className="w-1/2">
+                  <DropdownComponent
+                    input={{
+                      id: "category",
+                      label: "Catégorie",
+                      placeholder: "Select a category", // Optional placeholder
                     }}
-                    className="border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none p-2 w-full"
+                    value={category}
+                    handleSelect={handleDropdownChange}
+                    selectList={blogTypes}
+                    className="w-full"
                   />
-                </div> */}
+                </div>
+              </div>
+
+              <div className="flex flex-row items-start w-full gap-5">
                 <button
                   onClick={() => addBlog(false)}
-                  className={`my-5 px-10 py-2 text-[#3D75B0] bg-white rounded-md ${isSaving ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                  className={`my-5 px-10 py-2 text-[#3D75B0] bg-white rounded-md shadow-md ${
+                    isSaving ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   {isSaving === true ? (
                     <Loader2 className="animate-spin" size={20} />
@@ -281,8 +353,9 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
 
                 <button
                   onClick={() => addBlog(true)}
-                  className={`my-5 px-10 py-2 text-white bg-[#3D75B0] rounded-md ${isPublishing ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                  className={`my-5 px-10 py-2 text-white bg-[#3D75B0] rounded-md ${
+                    isPublishing ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   {isPublishing === true ? (
                     <Loader2 className="animate-spin" size={20} />
@@ -292,15 +365,9 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                 </button>
               </div>
 
-              <div className="w-full">
-                <p className="">{BLOG_INPUTS[3].label}</p>
-                <ReactQuill
-                  value={description}
-                  className="w-full h-[475px] mb-10"
-                  theme="snow"
-                  placeholder="Write job description"
-                  onChange={setDescription}
-                />
+              <div className="w-full h-[100vh] md:h-[70vh] mb-28">
+                <p className="mb-5">{BLOG_INPUTS[3].label}</p>
+                <div ref={quillRef} />
               </div>
             </div>
           </div>
