@@ -144,7 +144,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
         isModify ? selectedBlog?.description ?? "" : "",
       );
     }
-  }, [quill, selectedBlog?.description]);
+  }, [isModify, quill, selectedBlog?.description]);
 
   useEffect(() => {
     if (quill) {

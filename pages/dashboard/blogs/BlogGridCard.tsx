@@ -1,5 +1,5 @@
 import { Blog } from "@/components/dashboard_components/BlogList";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useMemo } from "react";
 
 interface BlogGridCardProps {
   blog: Blog;
@@ -14,14 +14,22 @@ const BlogGridCard = ({
   setItemToDelete,
   toggleShowDeleteModal,
 }: BlogGridCardProps) => {
+  const getBackground = useMemo(() => {
+    if (blog != null) {
+      if (blog.image !== null) {
+        return blog.image;
+      }
+    }
+
+    return "https://placehold.co/600x400";
+  }, []);
+
   return (
     <div className="flex flex-col w-[258px] px-3 py-4 gap-4 rounded-sm bg-white border border-[#D9D9D9]">
       <div
         className="h-36 bg-black rounded-sm"
         style={{
-          backgroundImage: `url("${
-            blog.image ? blog.image.toString() : "https://placehold.co/600x400"
-          }")`,
+          backgroundImage: `url(${getBackground})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
