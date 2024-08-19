@@ -38,7 +38,7 @@ const BlogGridCard = ({
         <div className="px-2 py-1 font-light text-sm bg-[#F6F1DD]">
           Nouveauté
         </div>
-        <h4 className="font-bold pr-16">{blog?.title ?? ""}</h4>
+        <h4 className="font-bold pr-16 line-clamp-3">{blog?.title ?? ""}</h4>
         <p className="font-light text-sm">{blog?.createdAt ?? ""}</p>
       </div>
       <div className="my-auto text-center flex flex-row">

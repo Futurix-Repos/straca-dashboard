@@ -24,6 +24,7 @@ export interface Blog {
   category: BlogType;
   image: File | null;
   description: string;
+  blogBody: string;
   status: string;
   createdBy: User | null;
   createdAt: string;
@@ -232,7 +233,7 @@ export const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
 
                           return (
                             <tr key={item._id}>
-                              <td className="py-2 px-4 border-b">
+                              <td className="py-2 px-4 border-b line-clamp-2">
                                 {item.title}
                               </td>
                               <td className="py-2 px-4 border-b">
@@ -241,9 +242,8 @@ export const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
                               <td className="py-2 px-4 border-b">
                                 {item.createdBy?.email ?? ""}
                               </td>
-                              <td className="py-2 px-4 border-b">
-                                {plainDescription}
-                                {plainDescription.length >= 30 ? "..." : ""}
+                              <td className="py-2 px-4 border-b line-clamp-2">
+                                {item.description}
                               </td>
                               <td className="py-2 px-4 border-b">
                                 {formattedDateString}

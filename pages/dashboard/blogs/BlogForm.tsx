@@ -14,12 +14,12 @@ import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import router, { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-// Use dynamic for lazy loading ReactQuill
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
+
 import Image from "next/image";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
+import { tr } from "date-fns/locale";
+
 interface props {
   selectedBlog: Blog | null;
 }
@@ -31,16 +31,12 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [description, setDescription] = useState("");
+  const [blogBody, setBlogBody] = useState("");
   // Attention
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
   const [blogTypes, setBlogTypes] = useState<BlogType[]>([]);
 
-  // For quill
-  const [range, setRange] = useState();
-  const [lastChange, setLastChange] = useState();
-  const [readOnly, setReadOnly] = useState(false);
   // Use a ref to access the quill instance directly
   const modules = {
     toolbar: [
@@ -63,7 +59,13 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
     clipboard: {
       matchVisual: false,
     },
+    blotFormatter2: {
+      image: {
+        registerImageTitleBlot: tr,
+      },
+    },
   };
+
   const formats = [
     "font",
     "blockquote",
@@ -84,14 +86,15 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
     "background",
     "clean",
   ];
-  const { quill, quillRef } = useQuill({
+  const { quill, quillRef, Quill } = useQuill({
     placeholder: "Ecrivez votre blog",
     modules,
     formats,
   });
+
   const wasChanged = useCallback(() => {
     if (
-      selectedBlog?.description !== description ||
+      selectedBlog?.blogBody !== blogBody ||
       imageFile !== null ||
       selectedBlog?.title !== title ||
       selectedBlog?.category.label !== category
@@ -100,12 +103,12 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
     } else {
       setIsChanged(false);
     }
-  }, [category, description, imageFile, selectedBlog, title]);
+  }, [category, blogBody, imageFile, selectedBlog, title]);
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [description, category, imageFile, title, isModify, wasChanged]);
+  }, [blogBody, category, imageFile, title, isModify, wasChanged]);
   useEffect(() => {
     const fetchBlogTypes = async () => {
       try {
@@ -133,7 +136,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
       console.log(`selblog==>${selectedBlog?.description}`);
       // setImageFile(selectedBlog?.image ?? null);
       setCategory(selectedBlog?.category.label ?? "");
-      setDescription(selectedBlog?.description ?? "");
+      setBlogBody(selectedBlog?.blogBody ?? "");
     }
   }, [selectedBlog, isModify]);
   console.log(`blog====>${blogTypes.length}`);
@@ -141,15 +144,15 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   useEffect(() => {
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(
-        isModify ? selectedBlog?.description ?? "" : "",
+        isModify ? selectedBlog?.blogBody ?? "" : "",
       );
     }
-  }, [isModify, quill, selectedBlog?.description]);
+  }, [isModify, quill, selectedBlog?.blogBody]);
 
   useEffect(() => {
     if (quill) {
       quill.on("text-change", (delta, oldDelta, source) => {
-        setDescription(quill.root.innerHTML);
+        setBlogBody(quill.root.innerHTML);
       });
     }
   }, [quill]);
@@ -179,7 +182,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
         "category",
         blogTypes.find((type) => type.label === category)?._id ?? "",
       );
-      formData.append("description", description);
+      formData.append("blogBody", blogBody);
       formData.append("status", isPublish ? "published" : "drafted");
       formData.append("createdBy", currentUser.id);
       if (imageFile !== null) {
@@ -190,7 +193,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
         title.trim() === "" ||
         category?.trim() === "" ||
         (imageFile === null && !isModify) ||
-        description.trim() === ""
+        blogBody.trim() === ""
       ) {
         Toast.fire({
           icon: "error",
