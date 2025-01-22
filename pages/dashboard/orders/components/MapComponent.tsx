@@ -26,9 +26,11 @@ export default function MapWrapper({
 
   const [isMarkerShow, setIsMarkerShow] = useState(true);
 
+  let key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
   const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script-straca",
-    googleMapsApiKey: "AIzaSyAmU6cWN8LG5ve3_8-ceRPBixEioKDnN4s",
+    googleMapsApiKey: key ?? "",
   });
 
   const success = useCallback(
