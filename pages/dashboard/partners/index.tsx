@@ -1,34 +1,19 @@
-import React, { ReactElement, useState } from 'react'
-import DashboardLayout from '../layout'
-import { Employee, EmployeeListComponent } from '@/components/dashboard_components/EmployeeList'
-import { useRouter } from 'next/router';
-import EmployeeForm from './EmployeeForm';
-
+import React, { ReactElement, useState } from "react";
+import DashboardLayout from "../layout";
+import EmployeeListComponent from "@/pages/dashboard/partners/components/EmployeeList";
 
 const PartnersPage = () => {
-  const [selectedEmployee , setSelectedEmployee] = useState<Employee | null>(null);
+  // Access action query parameter
 
-  const router = useRouter();
-  const { action } = router.query; // Access action query parameter
-  console.log(action);
-  
   return (
     <>
-    {action === 'new'|| action=== 'edit' ? (
-      <EmployeeForm selectedEmployee={selectedEmployee} /> // Render JobForm if action is "new"
-    ) : (
-      <EmployeeListComponent setSelectedEmployee={setSelectedEmployee}/> // Render JobListComponent otherwise
-    )}
-  </>
-  )
-}
+      <EmployeeListComponent /> /
+    </>
+  );
+};
 
 PartnersPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <DashboardLayout>
-      {page}
-    </DashboardLayout>
-  )
-}
+  return <DashboardLayout>{page}</DashboardLayout>;
+};
 
-export default PartnersPage
+export default PartnersPage;

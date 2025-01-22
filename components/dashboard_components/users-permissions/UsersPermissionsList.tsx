@@ -11,25 +11,9 @@ import Modal from "@/components/Modal";
 import { UpdateUserPermissionModal } from "@/components/dashboard_components/users-permissions/UpdateUserPermissionModal";
 import { GET } from "@/constants/fetchConfig";
 import CustomLoader from "@/components/CustomLoader";
+import { Permission, UserType } from "@/constants/types";
 
 export type PermissionName = (typeof validPermissionNames)[number];
-export interface Permission {
-  _id: string;
-  name: PermissionName;
-  description: string;
-  action: "update" | "read" | "create" | "delete";
-}
-export interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  status: string;
-  address: string;
-  type: "admin" | "employee" | "client";
-  permissions: Permission[];
-}
 
 function PermissionsModal({
   visible,
@@ -88,7 +72,7 @@ export const UsersPermissionsListComponent = () => {
   const [modify, setModify] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  const [selectedEmployee, setSelectedEmployee] = useState<User>();
+  const [selectedEmployee, setSelectedEmployee] = useState<UserType>();
   const [showModal, setShowModal] = useState(false);
 
   const toggleShowModal = () => {
@@ -98,13 +82,13 @@ export const UsersPermissionsListComponent = () => {
     }
   };
 
-  const handleModify = (item: User) => {
+  const handleModify = (item: UserType) => {
     setModify(true);
     setSelectedEmployee(item);
     toggleShowModal();
   };
 
-  const [employeesData, setEmployeesData] = useState<User[]>([]);
+  const [employeesData, setEmployeesData] = useState<UserType[]>([]);
 
   // Function to fetch employees data
 
@@ -116,7 +100,7 @@ export const UsersPermissionsListComponent = () => {
         }`,
       );
 
-      const data: User[] = response;
+      const data: UserType[] = response;
       // Set the fetched data into state
       setEmployeesData(data);
     } catch (error) {

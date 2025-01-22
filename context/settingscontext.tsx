@@ -1,9 +1,14 @@
-import { BlogType } from "@/components/dashboard_components/SettingComponents/blogcard";
-import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
-import { CountryType } from "@/components/dashboard_components/SettingComponents/countrycard";
-import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
-import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
-import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehicleCard";
+import {
+  BlogType,
+  ProductType,
+  VehicleType,
+  ContractType,
+  Proximity,
+  VehicleSource,
+  VehicleBrand,
+  VehicleModel,
+  Location,
+} from "@/constants/types";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 interface SettingsContextProps {
@@ -13,12 +18,18 @@ interface SettingsContextProps {
   setSelectedBlogType: (item: BlogType | null) => void;
   selectedVehicleType: VehicleType | null;
   setSelectedVehicleType: (item: VehicleType | null) => void;
-  selectedCountryType: CountryType | null;
-  setSelectedCountryType: (item: CountryType | null) => void;
-  selectedContractType: CountryType | null;
-  setSelectedContractType: (item: CountryType | null) => void;
-  selectedProximity: CountryType | null;
-  setSelectedProximity: (item: CountryType | null) => void;
+  selectedVehicleSource: VehicleSource | null;
+  setSelectedVehicleSource: (item: VehicleSource | null) => void;
+  selectedVehicleBrand: VehicleBrand | null;
+  setSelectedVehicleBrand: (item: VehicleBrand | null) => void;
+  selectedVehicleModel: VehicleModel | null;
+  setSelectedVehicleModel: (item: VehicleModel | null) => void;
+  selectedLocation: Location | null;
+  setSelectedLocation: (item: Location | null) => void;
+  selectedContractType: ContractType | null;
+  setSelectedContractType: (item: ContractType | null) => void;
+  selectedProximity: Proximity | null;
+  setSelectedProximity: (item: Proximity | null) => void;
 }
 
 const SettingsContext = createContext<SettingsContextProps | undefined>(
@@ -35,8 +46,15 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
   );
   const [selectedVehicleType, setSelectedVehicleType] =
     useState<VehicleType | null>(null);
-  const [selectedCountryType, setSelectedCountryType] =
-    useState<CountryType | null>(null);
+  const [selectedVehicleSource, setSelectedVehicleSource] =
+    useState<VehicleSource | null>(null);
+  const [selectedVehicleBrand, setSelectedVehicleBrand] =
+    useState<VehicleBrand | null>(null);
+  const [selectedVehicleModel, setSelectedVehicleModel] =
+    useState<VehicleModel | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null,
+  );
   const [selectedContractType, setSelectedContractType] =
     useState<ContractType | null>(null);
   const [selectedProximity, setSelectedProximity] = useState<Proximity | null>(
@@ -51,8 +69,14 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedBlogType,
         selectedVehicleType,
         setSelectedVehicleType,
-        selectedCountryType,
-        setSelectedCountryType,
+        selectedVehicleSource,
+        setSelectedVehicleSource,
+        selectedVehicleBrand,
+        setSelectedVehicleBrand,
+        selectedVehicleModel,
+        setSelectedVehicleModel,
+        selectedLocation,
+        setSelectedLocation,
         selectedContractType,
         setSelectedContractType,
         selectedProximity,

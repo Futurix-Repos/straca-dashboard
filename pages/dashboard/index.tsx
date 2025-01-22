@@ -1,23 +1,19 @@
-import React, { ReactElement } from 'react';
-import { NextPageWithLayout } from '../_app';
-import { SessionProvider } from 'next-auth/react';
-import DashboardLayout from './layout';
-import DashboardScreen from '@/components/dashboard_components/DashboardScreen';
+import React, { ReactElement } from "react";
+import { NextPageWithLayout } from "../_app";
+import { SessionProvider } from "next-auth/react";
+import DashboardLayout from "./layout";
+import DashboardScreen from "@/pages/dashboard/components/DashboardScreen";
 
 const Page: NextPageWithLayout = () => {
-    return (
-        <DashboardScreen />
-    )
-}
+  return <DashboardScreen />;
+};
 
-Page.getLayout = function getLayout(page: ReactElement,) {
-    return (
-        <SessionProvider>
-            <DashboardLayout>
-                {page}
-            </DashboardLayout>
-        </SessionProvider>
-    )
-}
+Page.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <SessionProvider>
+      <DashboardLayout>{page}</DashboardLayout>
+    </SessionProvider>
+  );
+};
 
-export default Page
+export default Page;

@@ -1,13 +1,13 @@
-import NextAuth, { NextAuthOptions, User as UserN } from "next-auth";
+import NextAuth, { NextAuthOptions, User, User as UserN } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import {User} from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
+import { UserType } from "@/constants/types";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      session = { ...session, user: token.user as User & UserN };
+      session = { ...session, user: token.user as UserType & UserN };
       return { ...session };
     },
   },
@@ -54,4 +54,4 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
