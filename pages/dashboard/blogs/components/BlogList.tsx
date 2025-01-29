@@ -59,7 +59,14 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
   const handleModify = useCallback(
     (item: Blog) => {
       setSelectedBlog(item);
-      router.push("/dashboard/blogs?action=edit");
+      router.push(
+        {
+          pathname: "/dashboard/blogs",
+          query: { action: "edit" },
+        },
+        undefined,
+        { shallow: true },
+      );
     },
     [router, setSelectedBlog],
   );
@@ -132,7 +139,14 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
         >
           <div
             onClick={() => {
-              router.push("/dashboard/blogs?action=new");
+              router.push(
+                {
+                  pathname: "/dashboard/blogs",
+                  query: { action: "new" },
+                },
+                undefined,
+                { shallow: true },
+              );
             }}
             className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]"
           >
@@ -277,13 +291,13 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
                                     setItemToDelete(item._id);
                                     toggleShowDeleteModal();
                                   }}
-                                  className="fa-regular fa-trash-can text-red-600"
+                                  className="fa-regular fa-trash-can text-red-600 cursor-pointer"
                                 ></i>
                                 <i
                                   onClick={() => {
                                     handleModify(item);
                                   }}
-                                  className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
+                                  className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB] cursor-pointer"
                                 ></i>
                               </td>
                             </tr>

@@ -48,13 +48,13 @@ const BlogGridCard = ({
             setItemToDelete(blog._id);
             toggleShowDeleteModal();
           }}
-          className="fa-regular fa-trash-can text-red-600"
+          className="fa-regular fa-trash-can text-red-600 cursor-pointer"
         ></i>
         <i
           onClick={() => {
             handleModify(blog);
           }}
-          className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
+          className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB] cursor-pointer"
         ></i>
       </div>
     </div>

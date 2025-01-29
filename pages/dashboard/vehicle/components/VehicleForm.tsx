@@ -198,7 +198,9 @@ const VehicleForm = ({ action }: { action: "add" | "edit" }) => {
         >
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
-        <p className="ml-2 font-semibold text-2xl">{`Créer un véhicule`}</p>
+        <p className="ml-2 font-semibold text-2xl">
+          {action === "add" ? `Créer un véhicule` : "Modifier un véhicule"}
+        </p>
       </div>
       <div className="w-full flex flex-col gap-5">
         {action === "edit" && isLoadingVehicle ? (
