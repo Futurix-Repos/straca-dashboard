@@ -59,14 +59,9 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
   const handleModify = useCallback(
     (item: Blog) => {
       setSelectedBlog(item);
-      router.push(
-        {
-          pathname: "/dashboard/blogs",
-          query: { action: "edit" },
-        },
-        undefined,
-        { shallow: true },
-      );
+      router.push({
+        pathname: "/dashboard/blogs",
+      });
     },
     [router, setSelectedBlog],
   );
@@ -139,14 +134,9 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
         >
           <div
             onClick={() => {
-              router.push(
-                {
-                  pathname: "/dashboard/blogs",
-                  query: { action: "new" },
-                },
-                undefined,
-                { shallow: true },
-              );
+              router.push({
+                pathname: "/dashboard/blogs",
+              });
             }}
             className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]"
           >
