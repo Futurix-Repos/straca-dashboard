@@ -68,8 +68,8 @@ const Login = () => {
         <div className="w-full mb-8">
           <div className="w-[70%] h-24 mx-auto mt-5 block">
             <svg
-              width="full"
-              height="full"
+              width={540}
+              height={62}
               viewBox="0 0 540 62"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +150,7 @@ const Login = () => {
                 (e) => setEmail(e.target.value),
                 undefined,
                 undefined,
-                "w-full"
+                "w-full",
               )}
               {renderInputField(
                 LOGIN_INPUTS[1],
@@ -160,7 +160,7 @@ const Login = () => {
                 undefined,
                 "w-full",
                 showPass,
-                setShowPass
+                setShowPass,
               )}
               <button
                 type="submit"

@@ -1,13 +1,6 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-// import { AddClientModal } from "./AddClientModal";
-import { BaseUrl } from "@/constants/templates";
-import router, { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState } from "react";
+
+import { useRouter } from "next/router";
 import BlogGridCard from "@/pages/dashboard/blogs/components/BlogGridCard";
 import { DELETE, GET } from "@/constants/fetchConfig";
 
@@ -16,8 +9,6 @@ import CustomLoader from "../../../../components/CustomLoader";
 import { getFormatedDate, htmlToPlainText } from "@/constants/markdownUtil";
 import { Toast } from "@/constants/toastConfig";
 import { BlogType, UserType } from "@/constants/types";
-
-// import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Blog {
   _id: string;
@@ -59,9 +50,7 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
   const handleModify = useCallback(
     (item: Blog) => {
       setSelectedBlog(item);
-      router.push({
-        pathname: "/dashboard/blogs",
-      });
+      router.push("?action=edit");
     },
     [router, setSelectedBlog],
   );
@@ -134,9 +123,7 @@ const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
         >
           <div
             onClick={() => {
-              router.push({
-                pathname: "/dashboard/blogs",
-              });
+              router.push("?action=new");
             }}
             className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]"
           >

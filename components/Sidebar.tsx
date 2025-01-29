@@ -7,6 +7,7 @@ import Image from "next/image";
 import { SidebarContext } from "@/context/sidebar-context";
 import Link from "next/link";
 import clsx from "clsx";
+import { signOut } from "next-auth/react";
 
 export interface SidebarItem {
   id: string;
@@ -163,7 +164,10 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup }) => {
                 </Fragment>
               ))}
             </ul>
-            <div className="flex flex-row px-5 py-2 mb-6 gap-3 items-center bg-red-600 text-white cursor-pointer">
+            <button
+              onClick={() => signOut()}
+              className="flex flex-row px-5 py-2 mb-6 gap-3 items-center bg-red-600 text-white cursor-pointer"
+            >
               <i
                 className="fa fa-sign-out"
                 aria-hidden="true"
@@ -171,7 +175,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup }) => {
               ></i>
 
               <p>Déconnexion</p>
-            </div>
+            </button>
           </div>
         </nav>
 
