@@ -86,7 +86,7 @@ const SettingTable = ({
                   <tr className="text-gray-500 text-sm">
                     <th className="py-2 px-4 border-b">Libellé</th>
                     <th className="py-2 px-4 border-b ">Description</th>
-                    {type === "vehicleModel" && (
+                    {type === "vehicleModels" && (
                       <th className="py-2 px-4 border-b ">Marque</th>
                     )}
                     {type === "products" && (
@@ -110,7 +110,7 @@ const SettingTable = ({
                             {item.description}
                           </div>
                         </td>
-                        {type === "vehicleModel" && (
+                        {type === "vehicleModels" && (
                           <td className="py-2 px-4 border-b ">
                             {item.brand.label}
                           </td>

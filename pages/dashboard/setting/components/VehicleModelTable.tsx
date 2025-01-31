@@ -52,7 +52,7 @@ const VehicleModelTable = () => {
 
   return (
     <SettingTable
-      type={"vehicleModel"}
+      type={"vehicleModels"}
       title={"Liste des modèles de véhicule"}
       handleDelete={(itemId) => {
         handleDelete({ itemId });
