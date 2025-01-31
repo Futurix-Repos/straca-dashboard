@@ -43,11 +43,11 @@ const LocationTable = () => {
   };
   const handleModify = ({ item }: { item: any }) => {
     setSelectedLocation(item);
-    router.push(`/dashboard/setting/${item._id}?type=location`);
+    router.push(`/dashboard/setting/${item._id}?type=locations`);
   };
 
   const handleCreate = () => {
-    router.push("/dashboard/setting/create?type=location");
+    router.push("/dashboard/setting/create?type=locations");
   };
 
   return (

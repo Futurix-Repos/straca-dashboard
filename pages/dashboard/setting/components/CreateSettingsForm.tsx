@@ -70,7 +70,7 @@ const CreateSettingsForm: React.FC = () => {
     const newType = {
       label: label,
       description: description,
-      ...(type === "vehicleModel" && { brand: selectedBrand?._id }),
+      ...(type === "vehicleModels" && { brand: selectedBrand?._id }),
       ...(type === "products" && { productType: selectedProductType?._id }),
       ...(type === "products" && {
         measureUnits: Array.isArray(selectedMeasureUnits)
@@ -81,7 +81,7 @@ const CreateSettingsForm: React.FC = () => {
     if (
       label.trim() === "" ||
       description.trim() === "" ||
-      (type === "vehicleModel" && selectedBrand === null) ||
+      (type === "vehicleModels" && selectedBrand === null) ||
       (type === "products" && selectedProductType === null) ||
       (type === "products" &&
         (selectedMeasureUnits === null ||
@@ -125,10 +125,10 @@ const CreateSettingsForm: React.FC = () => {
         {renderSettingsTextField(PRODUCT_CONFIG_INPUTS[1], description, (e) =>
           setDescription(e.target.value),
         )}
-        {type === "vehicleModel" && (
+        {type === "vehicleModels" && (
           <div className="w-[60%]">
             <VehicleBrandSelect
-              show={type === "vehicleModel"}
+              show={type === "vehicleModels"}
               selectedBrand={selectedBrand}
               setSelectedBrand={setSelectedBrand}
             />

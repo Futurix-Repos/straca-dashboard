@@ -44,11 +44,11 @@ const ProductTypeTable = () => {
   };
   const handleModify = ({ item }: { item: any }) => {
     setSelectedProductType(item);
-    router.push(`/dashboard/setting/${item._id}?type=productType`);
+    router.push(`/dashboard/setting/${item._id}?type=productTypes`);
   };
 
   const handleCreate = () => {
-    router.push("/dashboard/setting/create?type=productType");
+    router.push("/dashboard/setting/create?type=productTypes");
   };
 
   return (

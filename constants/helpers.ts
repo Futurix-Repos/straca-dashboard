@@ -13,13 +13,13 @@ export function elemTypeToDisplay(type: string) {
       return "Type de produit";
     case "blogType":
       return "Type de blog";
-    case "vehicleType":
+    case "vehicleTypes":
       return "Type de véhicule";
-    case "vehicleSource":
+    case "vehicleSources":
       return "Source de véhicule";
-    case "vehicleBrand":
+    case "vehicleBrands":
       return "Marque de véhicule";
-    case "vehicleModel":
+    case "vehicleModels":
       return "Modèle de véhicule";
     case "location":
       return "Site";

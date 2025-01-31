@@ -48,11 +48,11 @@ const VehicleSourceTable = () => {
     deleteVehicleSource.mutate({ id: itemId });
   };
   const handleModify = ({ item }: { item: any }) => {
-    router.push(`/dashboard/setting/${item._id}?type=vehicleSource`);
+    router.push(`/dashboard/setting/${item._id}?type=vehicleSources`);
   };
 
   const handleCreate = () => {
-    router.push("/dashboard/setting/create?type=vehicleSource");
+    router.push("/dashboard/setting/create?type=vehicleSources");
   };
 
   return (

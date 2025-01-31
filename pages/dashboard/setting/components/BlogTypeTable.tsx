@@ -43,11 +43,11 @@ const BlogTypeTable = () => {
     deleteBlogType.mutate({ id: itemId });
   };
   const handleModify = ({ item }: { item: any }) => {
-    router.push(`/dashboard/setting/${item._id}?type=blogType`);
+    router.push(`/dashboard/setting/${item._id}?type=blogTypes`);
   };
 
   const handleCreate = () => {
-    router.push("/dashboard/setting/create?type=blogType");
+    router.push("/dashboard/setting/create?type=blogTypes");
   };
 
   return (

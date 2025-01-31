@@ -659,7 +659,7 @@ const OrderForm = ({ action }: { action: "create" | "edit" }) => {
                 setDestinationAddress((prevState) => {
                   return {
                     name: e.target.value ?? "",
-                    location: {
+                    locations: {
                       lng: prevState?.location?.lng ?? 0,
                       lat: prevState?.location?.lat ?? 0,
                     },
@@ -678,7 +678,7 @@ const OrderForm = ({ action }: { action: "create" | "edit" }) => {
                   setDestinationAddress((prevState) => {
                     return {
                       name: prevState?.name ?? "",
-                      location: {
+                      locations: {
                         lat: coordinates.lat ?? 0,
                         lng: coordinates.lng ?? 0,
                       },
@@ -700,7 +700,7 @@ const OrderForm = ({ action }: { action: "create" | "edit" }) => {
                   setDestinationAddress((prevState) => {
                     return {
                       name: prevState?.name ?? "",
-                      location: {
+                      locations: {
                         lat: prevState?.location?.lat ?? 0,
                         lng: lng,
                       },
@@ -722,7 +722,7 @@ const OrderForm = ({ action }: { action: "create" | "edit" }) => {
                   setDestinationAddress((prevState) => {
                     return {
                       name: prevState?.name ?? "",
-                      location: {
+                      locations: {
                         lng: prevState?.location?.lng ?? 0,
                         lat: lat,
                       },

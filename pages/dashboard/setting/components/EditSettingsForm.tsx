@@ -61,7 +61,7 @@ const EditSettingsForm: React.FC = () => {
       settingElemTypes.includes(type as any) &&
       (label !== itemData?.label ||
         description !== itemData?.description ||
-        (type === "vehicleModel" && selectedBrand?._id !== itemData.brand._id))
+        (type === "vehicleModels" && selectedBrand?._id !== itemData.brand._id))
     ) {
       setIsChanged(true);
     } else {
@@ -80,7 +80,7 @@ const EditSettingsForm: React.FC = () => {
       if (settingElemTypes.includes(type as any)) {
         setLabel(itemData.label);
         setDescription(itemData.description);
-        if (type === "vehicleModel") {
+        if (type === "vehicleModels") {
           setSelectedBrand(itemData.brand ?? null);
         }
       }
@@ -95,7 +95,7 @@ const EditSettingsForm: React.FC = () => {
     const newType = {
       ...(label.length > 0 && { label: label }),
       ...(description.length > 0 && { description: description }),
-      ...(type === "vehicleModel" &&
+      ...(type === "vehicleModels" &&
         selectedBrand != null && { brand: selectedBrand._id }),
     };
     if (label.trim() === "" || description.trim() === "") {
@@ -147,12 +147,14 @@ const EditSettingsForm: React.FC = () => {
           {renderSettingsTextField(PRODUCT_CONFIG_INPUTS[1], description, (e) =>
             setDescription(e.target.value),
           )}
-          {type === "vehicleModel" && (
-            <VehicleBrandSelect
-              show={type === "vehicleModel"}
-              selectedBrand={selectedBrand}
-              setSelectedBrand={setSelectedBrand}
-            />
+          {type === "vehicleModels" && (
+            <div className="w-[60%]">
+              <VehicleBrandSelect
+                show={type === "vehicleModels"}
+                selectedBrand={selectedBrand}
+                setSelectedBrand={setSelectedBrand}
+              />
+            </div>
           )}
         </div>
       )}

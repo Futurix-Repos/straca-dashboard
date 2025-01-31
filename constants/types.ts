@@ -3,14 +3,14 @@ import { User } from "next-auth";
 
 const SettingElemTypeObj = {
   products: "products",
-  productType: "productType",
-  blogType: "blogType",
-  vehicleType: "vehicleType",
-  vehicleSource: "vehicleSource",
-  vehicleBrand: "vehicleBrand",
-  vehicleModel: "vehicleModel",
-  location: "location",
-  contractType: "contractType",
+  productTypes: "productTypes",
+  blogTypes: "blogTypes",
+  vehicleTypes: "vehicleTypes",
+  vehicleSources: "vehicleSources",
+  vehicleBrands: "vehicleBrands",
+  vehicleModels: "vehicleModels",
+  locations: "locations",
+  contractTypes: "contractTypes",
   proximity: "proximity",
   measureUnits: "measureUnits",
 } as const;

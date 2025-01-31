@@ -43,11 +43,11 @@ const ContractTypeTable = () => {
     deleteContractType.mutate({ id: itemId });
   };
   const handleModify = ({ item }: { item: any }) => {
-    router.push(`/dashboard/setting/${item._id}?type=contractType`);
+    router.push(`/dashboard/setting/${item._id}?type=contractTypes`);
   };
 
   const handleCreate = () => {
-    router.push("/dashboard/setting/create?type=contractType");
+    router.push("/dashboard/setting/create?type=contractTypes");
   };
 
   return (

@@ -43,11 +43,11 @@ const VehicleTypeTable = () => {
     deleteVehicleType.mutate({ id: itemId });
   };
   const handleModify = ({ item }: { item: any }) => {
-    router.push(`/dashboard/setting/${item._id}?type=vehicleType`);
+    router.push(`/dashboard/setting/${item._id}?type=vehicleTypes`);
   };
 
   const handleCreate = () => {
-    router.push("/dashboard/setting/create?type=vehicleType");
+    router.push("/dashboard/setting/create?type=vehicleTypes");
   };
 
   return (
